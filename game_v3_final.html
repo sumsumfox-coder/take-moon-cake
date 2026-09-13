@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="zh-Hant"><head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260911-05-06910f9","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script><script src="/_sdk/c21197326e9a1154.telemetry_sdk.js" integrity="sha512-Aqwl+NmLtKBcMQM4HY+W9lmBHa+zP5MqSEuYfCjkzt4xeOSv2xNz81cCp7JyXBVrY+zojg5o94FHY/R31v2d3Q=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中秋接月餅認字遊戲</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700;800&amp;family=Noto+Sans+TC:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night: #18224d;
+      --night-deep: #101638;
+      --gold: #ffd75a;
+      --cream: #fff7de;
+      --coral: #f46d55;
+      --mint: #73d4b0;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      font-family: "Noto Sans TC", "Work Sans", sans-serif;
+      overflow-x: hidden;
+    }
+
+    .app-shell { width: 100%; min-height: calc(100 * min(var(--vh, 1vh), 1vh)); }
+    .screen { min-height: calc(100 * min(var(--vh, 1vh), 1vh)); width: 100%; }
+    .hidden-screen { display: none !important; }
+
+    .sky-panel {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(180deg, #18224d 0%, #2f3d7c 57%, #f3a961 100%);
+    }
+
+    .sky-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .7;
+      background-image: radial-gradient(circle at 15% 22%, #fff6ba 0 2px, transparent 2.5px),
+        radial-gradient(circle at 77% 15%, #fff6ba 0 2px, transparent 2.5px),
+        radial-gradient(circle at 91% 38%, #fff6ba 0 1.5px, transparent 2px),
+        radial-gradient(circle at 33% 43%, #fff6ba 0 1.5px, transparent 2px),
+        radial-gradient(circle at 55% 10%, #fff6ba 0 1px, transparent 1.8px);
+      background-size: 190px 175px, 260px 210px, 160px 180px, 220px 200px, 180px 160px;
+      z-index: -1;
+    }
+
+    .moon {
+      width: clamp(80px, 12vw, 150px);
+      aspect-ratio: 1;
+      border-radius: 999px;
+      background: #fff3bd;
+      box-shadow: 0 0 0 13px rgba(255, 225, 124, .12), 0 0 52px rgba(255, 234, 163, .6);
+    }
+    .cloud { filter: drop-shadow(0 8px 8px rgba(15, 20, 60, .15)); animation: drift 7s ease-in-out infinite alternate; }
+    .cloud:nth-child(2) { animation-delay: -3s; }
+    @keyframes drift { to { transform: translateX(22px); } }
+
+    .start-card {
+      background: rgba(255, 250, 232, .96);
+      box-shadow: 0 20px 0 rgba(16, 22, 56, .12), 0 22px 40px rgba(10, 14, 43, .28);
+    }
+    .character-choice {
+      border: 4px solid transparent;
+      background: #fffdf3;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .character-choice:hover, .character-choice:focus-visible { transform: translateY(-5px); }
+    .character-choice.selected {
+      border-color: #f4a62a;
+      background: #fff0ba;
+      box-shadow: 0 10px 0 #e89822;
+    }
+    .choice-avatar { font-size: clamp(3.5rem, 7vw, 5.5rem); line-height: 1; }
+    .choice-tick { opacity: 0; transform: scale(.4); transition: .18s ease; }
+    .selected .choice-tick { opacity: 1; transform: scale(1); }
+
+    .game-board {
+      position: relative;
+      overflow: hidden;
+      height: min(64vw, 570px);
+      min-height: 410px;
+      max-height: 64vh;
+      border: 5px solid rgba(255, 247, 213, .75);
+      border-radius: 28px;
+      background: linear-gradient(180deg, #171e49 0%, #394c9a 73%, #7d5c80 100%);
+      box-shadow: 0 16px 32px rgba(7, 11, 37, .32);
+      touch-action: none;
+    }
+    .game-board::after {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: -5%;
+      width: 110%;
+      height: 17%;
+      border-radius: 50% 50% 0 0;
+      background: #25345f;
+      opacity: .92;
+      pointer-events: none;
+    }
+
+    .falling-mooncake {
+      position: absolute;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      width: 76px;
+      height: 76px;
+      border: 6px solid #a75025;
+      border-radius: 42% 42% 47% 47%;
+      color: #702d19;
+      background: repeating-radial-gradient(circle at center, #ffd774 0 8px, #e9a948 9px 12px);
+      box-shadow: inset 0 0 0 5px #f8c85e, 0 8px 0 rgba(107, 47, 24, .34);
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1;
+      user-select: none;
+    }
+    .falling-mooncake.catch-pop { animation: catchPop .36s ease-out forwards; }
+    @keyframes catchPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.45) rotate(12deg); }
+      100% { transform: scale(.1) rotate(35deg); opacity: 0; }
+    }
+
+    .player {
+      position: absolute;
+      z-index: 7;
+      bottom: 17px;
+      width: 96px;
+      text-align: center;
+      transition: left .05s linear, transform .16s ease;
+      user-select: none;
+    }
+    .player.bounce { transform: translateY(-15px) scale(1.1); }
+    .player-avatar { font-size: 4.7rem; line-height: .92; filter: drop-shadow(0 7px 1px rgba(16, 18, 44, .35)); }
+    .player-basket {
+      width: 74px; height: 23px; margin: -5px auto 0;
+      border: 5px solid #bd632d; border-top: none; border-radius: 0 0 45px 45px;
+      background: #f3b75e;
+    }
+
+    .hud-card { background: #fff8e7; border: 3px solid #ffe8a0; }
+    .status-pill { min-width: 92px; }
+    .heart { color: #ed5d5d; transition: transform .2s ease, opacity .2s ease; }
+    .heart.lost { opacity: .18; transform: scale(.72); }
+    .feedback {
+      min-height: 54px;
+      transform: translateY(-5px);
+      opacity: 0;
+      transition: .2s ease;
+    }
+    .feedback.show { opacity: 1; transform: translateY(0); }
+
+    .touch-control {
+      width: 76px; height: 66px;
+      border: 4px solid #fff4c9;
+      border-radius: 20px;
+      color: #fff;
+      background: #ee7354;
+      box-shadow: 0 6px 0 #b7493c;
+      transition: transform .1s ease, box-shadow .1s ease;
+    }
+    .touch-control:active { transform: translateY(5px); box-shadow: 0 1px 0 #b7493c; }
+
+    .result-card {
+      background: #fff9e8;
+      box-shadow: 0 18px 0 rgba(23, 30, 73, .15), 0 24px 46px rgba(9, 13, 42, .28);
+    }
+    .reveal { animation: reveal .45s ease both; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    button:focus-visible { outline: 4px solid #fff; outline-offset: 3px; }
+    @media (max-width: 640px) {
+      .game-board { height: 520px; min-height: 520px; max-height: none; border-radius: 22px; }
+      .falling-mooncake { width: 67px; height: 67px; font-size: 2rem; }
+      .player { width: 82px; }
+      .player-avatar { font-size: 4rem; }
+    }
+  </style>
+  <script src="/_sdk/efe904fe8a212716.data_sdk.js" type="text/javascript" integrity="sha512-oiO0pmn5llS1uDeB2l690YywxqOe/a0U1kzY6RGaLZXtyh9YjTk1CUoK/bJUugc1QbUaJMJ3IE1MtpNY5NBZCw=="></script>
+  <script src="/_sdk/6125e8aa3c264a2d.resizing_sdk.js" type="text/javascript" integrity="sha512-+j9iK2FF/yFSTU389rFqKj3v0s1ELh1r0aj3mqpsVRZujaeWi0WgN7jmTcWLcBq91dz3NCEyXqMtHbwpOxhDYg=="></script>
+ </head>
+ <body data-template-id="__page-root" class="app-shell" style="background: linear-gradient(rgb(24, 34, 77), rgb(243, 169, 97));">
+  <main class="w-full">
+   <section id="start-screen" class="screen sky-panel flex items-center justify-center px-4 py-8">
+    <div class="absolute left-[7%] top-[10%] moon"></div>
+    <div class="cloud absolute right-[7%] top-[14%] text-6xl" aria-hidden="true">
+     ☁️
+    </div>
+    <div class="cloud absolute left-[4%] bottom-[12%] text-5xl" aria-hidden="true">
+     ☁️
+    </div>
+    <div class="start-card reveal relative z-10 w-full max-w-4xl rounded-[32px] px-5 py-7 text-center sm:px-10 sm:py-9">
+     <header>
+      <div data-template-id="start-badge" class="canva-tag mx-auto mb-3 inline-block rounded-full px-5 py-2 text-base font-extrabold" style="background: rgb(255, 227, 154); color: rgb(120, 55, 29); font-weight: 700; font-style: normal; font-size: 18px;">中秋快樂・一起認字</div>
+      <h1 data-template-id="game-title" class="canva-text mb-3 font-extrabold leading-tight" style="color: rgb(36, 48, 95); font-weight: 800; font-style: normal; font-size: 36px;">中秋接月餅認字遊戲</h1>
+      <p data-template-id="game-intro" class="canva-text mx-auto max-w-2xl leading-relaxed" style="color: rgb(77, 73, 96); font-weight: 600; font-style: normal; font-size: 18px; line-height: 1.6;">選一位角色，接住和目標字一樣的月餅！可用鍵盤方向鍵、A／D 鍵或畫面按鈕移動。</p>
+     </header>
+     <section class="mt-7" aria-labelledby="role-heading">
+      <h2 id="role-heading" data-template-id="role-heading-text" class="canva-text mb-4 font-extrabold" style="color: rgb(36, 48, 95); font-weight: 800; font-style: normal; font-size: 27px;">先選擇你的遊戲角色</h2>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+       <button type="button" class="character-choice rounded-3xl p-4 text-center" data-character="兔仔" aria-pressed="false"> <span class="choice-tick float-right grid h-7 w-7 place-items-center rounded-full bg-green-500 text-sm text-white" aria-hidden="true">✓</span> <span class="choice-avatar block" aria-hidden="true">🐰</span> <span data-template-id="character-rabbit" class="canva-text mt-3 block font-extrabold" style="color: rgb(123, 58, 39); font-weight: 800; font-style: normal; font-size: 23px;">兔仔</span> </button> <button type="button" class="character-choice rounded-3xl p-4 text-center" data-character="恐龍" aria-pressed="false"> <span class="choice-tick float-right grid h-7 w-7 place-items-center rounded-full bg-green-500 text-sm text-white" aria-hidden="true">✓</span> <span class="choice-avatar block" aria-hidden="true">🦕</span> <span data-template-id="character-dino" class="canva-text mt-3 block font-extrabold" style="color: rgb(55, 102, 77); font-weight: 800; font-style: normal; font-size: 23px;">恐龍</span> </button> <button type="button" class="character-choice rounded-3xl p-4 text-center" data-character="小貓" aria-pressed="false"> <span class="choice-tick float-right grid h-7 w-7 place-items-center rounded-full bg-green-500 text-sm text-white" aria-hidden="true">✓</span> <span class="choice-avatar block" aria-hidden="true">🐱</span> <span data-template-id="character-cat" class="canva-text mt-3 block font-extrabold" style="color: rgb(118, 80, 45); font-weight: 800; font-style: normal; font-size: 23px;">小貓</span> </button>
+      </div>
+     </section>
+     <p id="choose-message" data-template-id="choose-message" class="canva-text mt-5 min-h-7 font-bold" aria-live="polite" style="color: rgb(177, 78, 61); font-weight: 700; font-style: normal; font-size: 17px;">選好角色後，就可以開始囉！</p><button id="start-button" data-template-id="start-button" type="button" class="canva-button mt-2 rounded-2xl px-9 py-4 font-extrabold shadow-[0_7px_0_#b94b37] transition hover:-translate-y-1 active:translate-y-1 active:shadow-none" style="background: rgb(239, 113, 85); color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 22px;">開始遊戲</button>
+    </div>
+   </section>
+   <section id="game-screen" class="screen sky-panel hidden-screen px-3 py-4 sm:px-6 sm:py-6">
+    <div class="relative z-10 mx-auto w-full max-w-5xl">
+     <header class="mb-3 flex flex-wrap items-center justify-between gap-3">
+      <div data-template-id="game-label" class="canva-tag rounded-full px-4 py-2 text-sm font-extrabold" style="background: rgb(255, 220, 105); color: rgb(94, 47, 36); font-weight: 800; font-style: normal; font-size: 18px;">🌕 月餅認字挑戰</div>
+      <div class="flex flex-wrap gap-2">
+       <div data-template-id="score-panel" class="canva-panel hud-card status-pill rounded-2xl px-3 py-2 text-center" style="background: rgb(255, 248, 231);">
+        <span data-template-id="score-label" class="canva-text block text-xs font-bold" style="color: rgb(102, 85, 114); font-weight: 700; font-style: normal; font-size: 18px;">分數</span> <strong id="score-value" class="text-xl text-[#22315d]" aria-live="polite">0</strong>
+       </div>
+       <div data-template-id="round-panel" class="canva-panel hud-card status-pill rounded-2xl px-3 py-2 text-center" style="background: rgb(255, 248, 231);">
+        <span data-template-id="round-label" class="canva-text block text-xs font-bold" style="color: rgb(102, 85, 114); font-weight: 700; font-style: normal; font-size: 18px;">回合</span> <strong id="round-value" class="text-xl text-[#22315d]" aria-live="polite">1 / 10</strong>
+       </div>
+       <div data-template-id="heart-panel" class="canva-panel hud-card rounded-2xl px-3 py-2 text-center" style="background: rgb(255, 248, 231);">
+        <span data-template-id="heart-label" class="canva-text block text-xs font-bold" style="color: rgb(102, 85, 114); font-weight: 700; font-style: normal; font-size: 18px;">愛心</span>
+        <div class="mt-0.5 flex justify-center gap-1 text-xl" aria-label="剩餘愛心">
+         <span id="heart-1" class="heart">♥</span><span id="heart-2" class="heart">♥</span><span id="heart-3" class="heart">♥</span>
+        </div>
+       </div>
+      </div>
+     </header>
+     <section data-template-id="target-panel" class="canva-banner mb-3 rounded-3xl px-4 py-3 text-center shadow-lg" style="background: rgb(255, 245, 191); color: rgb(110, 48, 26);">
+      <p data-template-id="target-label" class="canva-text font-bold" style="color: rgb(126, 64, 36); font-weight: 800; font-style: normal; font-size: 20px;">請接住這個字：</p>
+      <div id="target-word" class="mt-1 font-extrabold leading-none text-[#6e301a]" aria-live="polite"></div>
+      <p data-template-id="progress-label" class="canva-text mt-3 font-bold" style="color: rgb(126, 64, 36); font-weight: 800; font-style: normal; font-size: 18px;">組詞進度</p>
+      <div id="word-progress" class="mt-1 text-2xl font-extrabold tracking-[0.22em] text-[#6e301a]" aria-live="polite">
+       林 _ _ _
+      </div>
+     </section>
+     <div id="feedback" class="feedback flex items-center justify-center gap-2 rounded-2xl bg-[#fff5c8] px-4 py-3 text-center font-extrabold text-[#78371d]" aria-live="assertive">
+      <i id="feedback-icon" data-lucide="sparkles" class="h-5 w-5"></i><span id="feedback-text"></span>
+     </div>
+     <section id="game-board" class="game-board" aria-label="接月餅遊戲區">
+      <div class="absolute left-[11%] top-[13%] text-3xl opacity-90" aria-hidden="true">
+       ✦
+      </div>
+      <div class="absolute right-[13%] top-[23%] text-2xl text-[#ffe98e]" aria-hidden="true">
+       ★
+      </div>
+      <div class="absolute left-[45%] top-[6%] text-xl text-[#ffe98e]" aria-hidden="true">
+       ✦
+      </div>
+      <div class="absolute right-[27%] top-[54%] text-4xl opacity-50" aria-hidden="true">
+       ☁
+      </div>
+      <div id="player" class="player" aria-label="遊戲角色">
+       <div id="player-avatar" class="player-avatar" aria-hidden="true">
+        🐰
+       </div>
+       <div class="player-basket" aria-hidden="true"></div>
+      </div>
+     </section>
+     <nav class="mt-4 flex items-center justify-center gap-5" aria-label="角色移動控制">
+      <button id="move-left" data-template-id="move-left" type="button" class="canva-button touch-control grid place-items-center" aria-label="向左移動" style="background: rgb(238, 115, 84); color: rgb(255, 255, 255);"> <i data-lucide="arrow-left" class="h-9 w-9"></i> </button>
+      <p data-template-id="control-hint" class="canva-text max-w-xs text-center font-bold leading-snug" style="color: rgb(255, 248, 220); font-weight: 700; font-style: normal; font-size: 16px;">按左右按鈕，或用鍵盤 ← →、A／D 移動</p><button id="move-right" data-template-id="move-right" type="button" class="canva-button touch-control grid place-items-center" aria-label="向右移動" style="background: rgb(238, 115, 84); color: rgb(255, 255, 255);"> <i data-lucide="arrow-right" class="h-9 w-9"></i> </button>
+     </nav>
+    </div>
+   </section>
+   <section id="result-screen" class="screen sky-panel hidden-screen flex items-center justify-center px-4 py-8">
+    <div class="absolute right-[10%] top-[9%] moon"></div>
+    <div class="absolute left-[8%] top-[17%] text-4xl text-[#ffec91]" aria-hidden="true">
+     ✦
+    </div>
+    <div class="result-card reveal relative z-10 w-full max-w-xl rounded-[34px] px-6 py-9 text-center sm:px-11">
+     <header>
+      <div class="mx-auto text-7xl" id="result-avatar" aria-hidden="true">
+       🐰
+      </div>
+      <h1 id="result-title" data-template-id="result-title" class="canva-text mt-3 font-extrabold" style="color: rgb(39, 50, 96); font-weight: 800; font-style: normal; font-size: 36px;">遊戲完成！</h1>
+      <h1 id="result-failure-title" data-template-id="result-failure-title" class="canva-text mt-3 hidden-screen font-extrabold" style="color: rgb(39, 50, 96); font-weight: 800; font-style: normal; font-size: 36px;">遊戲失敗</h1>
+      <p id="result-victory" data-template-id="result-victory" class="canva-text mt-2 hidden-screen text-xl font-extrabold" style="color: rgb(223, 97, 63); font-weight: 800; font-style: normal; font-size: 18px;">恭喜你！完成詞語：林林總總</p>
+      <p data-template-id="result-progress-label" class="canva-text mt-2 font-bold" style="color: rgb(115, 65, 40); font-weight: 800; font-style: normal; font-size: 18px;">目前組詞進度</p>
+      <p id="result-progress" class="mt-1 text-2xl font-extrabold tracking-[0.18em] text-[#8a3f22]">_ _ _ _</p>
+      <p data-template-id="result-role-label" class="canva-text mt-2 font-bold" style="color: rgb(109, 96, 115); font-weight: 600; font-style: normal; font-size: 17px;">今天一起認字的角色是</p>
+      <p id="result-role" class="mt-1 text-2xl font-extrabold text-[#e5684d]"></p>
+     </header>
+     <section class="my-6 grid grid-cols-2 gap-4">
+      <div data-template-id="result-score-card" class="canva-card rounded-3xl p-4" style="background: rgb(255, 233, 161);">
+       <p data-template-id="result-score-label" class="canva-text font-bold" style="color: rgb(115, 65, 40); font-weight: 800; font-style: normal; font-size: 18px;">總分</p>
+       <p id="result-score" class="mt-1 text-4xl font-extrabold text-[#8a3f22]">0</p>
+      </div>
+      <div data-template-id="result-correct-card" class="canva-card rounded-3xl p-4" style="background: rgb(215, 241, 218);">
+       <p data-template-id="result-correct-label" class="canva-text font-bold" style="color: rgb(62, 104, 78); font-weight: 800; font-style: normal; font-size: 18px;">答對回合</p>
+       <p id="result-correct" class="mt-1 text-4xl font-extrabold text-[#8a3f22]">0</p>
+      </div>
+     </section>
+     <p id="praise-high" data-template-id="praise-high" class="canva-text hidden-screen text-2xl font-extrabold" style="color: rgb(223, 97, 63); font-weight: 800; font-style: normal; font-size: 18px;">認字小高手！</p>
+     <p id="praise-mid" data-template-id="praise-mid" class="canva-text hidden-screen text-2xl font-extrabold" style="color: rgb(223, 97, 63); font-weight: 800; font-style: normal; font-size: 18px;">很棒！繼續努力！</p>
+     <p id="praise-low" data-template-id="praise-low" class="canva-text hidden-screen text-2xl font-extrabold" style="color: rgb(223, 97, 63); font-weight: 800; font-style: normal; font-size: 18px;">再玩一次，會越來越好！</p>
+     <p id="failure-encouragement" data-template-id="failure-encouragement" class="canva-text hidden-screen text-2xl font-extrabold" style="color: rgb(223, 97, 63); font-weight: 800; font-style: normal; font-size: 18px;">加油！再挑戰一次！</p>
+     <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+      <button id="replay-button" data-template-id="replay-button" type="button" class="canva-button rounded-2xl px-6 py-3 font-extrabold shadow-[0_6px_0_#b94b37] transition hover:-translate-y-1 active:translate-y-1 active:shadow-none" style="background: rgb(239, 113, 85); color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 19px;">再玩一次</button> <button id="return-button" data-template-id="return-button" type="button" class="canva-button rounded-2xl px-6 py-3 font-extrabold transition hover:-translate-y-1" style="background: rgb(253, 232, 172); color: rgb(113, 56, 32); font-weight: 800; font-style: normal; font-size: 19px;">返回主頁</button>
+     </div>
+    </div>
+   </section>
+   <section id="leaderboard-screen" class="screen sky-panel hidden-screen flex items-center justify-center px-4 py-8">
+    <div class="absolute right-[10%] top-[9%] moon"></div>
+    <div class="result-card reveal relative z-10 w-full max-w-2xl rounded-[34px] px-5 py-8 text-center sm:px-11">
+     <header>
+      <div class="mx-auto text-6xl" aria-hidden="true">
+       🏆
+      </div>
+      <h1 data-template-id="leaderboard-title" class="canva-text mt-2 font-extrabold" style="color: rgb(39, 50, 96); font-weight: 800; font-style: normal; font-size: 36px;">龍虎榜</h1>
+      <p data-template-id="leaderboard-intro" class="canva-text mt-2 font-bold" style="color: rgb(223, 97, 63); font-weight: 800; font-style: normal; font-size: 19px;">恭喜完成『林林總總』！以最快完成時間排名！</p>
+     </header>
+     <form id="leaderboard-form" class="mt-6 flex flex-col gap-3 sm:flex-row" novalidate=""><label class="sr-only" for="student-name">姓名</label> <input id="student-name" data-template-id="student-name-input" class="canva-input min-w-0 flex-1 rounded-2xl border-4 border-[#f5c96a] bg-white px-5 py-4 text-lg font-bold text-[#3f3150]" type="text" maxlength="24" autocomplete="name" placeholder="請輸入你的姓名" style="color: rgb(63, 49, 80); font-weight: 700; font-style: normal; font-size: 19px;"> <button id="leaderboard-submit" data-template-id="leaderboard-submit" type="submit" class="canva-button rounded-2xl px-6 py-4 font-extrabold shadow-[0_6px_0_#b94b37] transition hover:-translate-y-1 active:translate-y-1 active:shadow-none" style="background: rgb(239, 113, 85); color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 19px;">登上龍虎榜</button>
+     </form>
+     <p id="leaderboard-message" data-template-id="leaderboard-message" class="mt-3 min-h-7 font-bold" aria-live="polite" style="color: rgb(177, 78, 61); font-weight: 700;"></p>
+     <section class="mt-5 text-left" aria-labelledby="leaderboard-heading">
+      <h2 id="leaderboard-heading" data-template-id="leaderboard-heading" class="canva-text mb-3 text-center font-extrabold" style="color: rgb(36, 48, 95); font-weight: 800; font-style: normal; font-size: 24px;">目前席位</h2>
+      <ol id="leaderboard-list" class="space-y-2"></ol>
+     </section>
+     <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row"><button id="leaderboard-replay" data-template-id="leaderboard-replay" type="button" class="canva-button rounded-2xl px-6 py-3 font-extrabold shadow-[0_6px_0_#b94b37] transition hover:-translate-y-1 active:translate-y-1 active:shadow-none" style="background: rgb(239, 113, 85); color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 19px;">再玩一次</button> <button id="leaderboard-return" data-template-id="leaderboard-return" type="button" class="canva-button rounded-2xl px-6 py-3 font-extrabold transition hover:-translate-y-1" style="background: rgb(253, 232, 172); color: rgb(113, 56, 32); font-weight: 800; font-style: normal; font-size: 19px;">返回遊戲</button>
+     </div>
+    </div>
+   </section>
+  </main>
+  <script src="/_sdk/6f16dc4ffc0cf3fe.editing_sdk.js" integrity="sha512-XcGkt+MVg9QK/rlrq9umdkP9LzshVjIu+vaITjWOSFti+dqk5aHBHkCCQ/IXnnUyJtw0F+lYzvT7m4EfPrBrjg=="></script>
+  <script>
+    const targetWords = ["林", "林", "總", "總"];
+    const distractorWords = ["月", "兔", "家", "花", "山", "水", "日", "天", "口", "人", "木", "火"];
+    const avatars = { "兔仔": "🐰", "恐龍": "🦕", "小貓": "🐱" };
+    const totalRounds = targetWords.length;
+    const MAX_HEARTS = 3;
+    const NO_CORRECT_TIMEOUT = 4.5;
+    const WATCHDOG_INTERVAL_MS = 1000;
+    let selectedCharacter = "";
+    let gameState = null;
+    let animationFrame = null;
+    let lastTime = 0;
+    let spawnTimer = 0;
+    let audioContext = null;
+    let gameStartTime = 0;
+    let completionTime = 0;
+    let watchdogTimer = null;
+    let lastLoopTick = 0;
+
+    const screens = {
+      start: document.getElementById("start-screen"),
+      game: document.getElementById("game-screen"),
+      result: document.getElementById("result-screen"),
+      leaderboard: document.getElementById("leaderboard-screen")
+    };
+    const leaderboardEntries = [];
+    let submissionOrder = 0;
+    let latestGameResult = null;
+
+    function el(id) {
+      const node = document.getElementById(id);
+      if (!node) console.warn("找不到元素 id=", id);
+      return node;
+    }
+
+    function showScreen(name) {
+      Object.entries(screens).forEach(([key, screen]) => screen && screen.classList.toggle("hidden-screen", key !== name));
+    }
+
+    function playTone(type) {
+      try {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.type = type === "good" ? "sine" : "triangle";
+        osc.frequency.setValueAtTime(type === "good" ? 660 : 180, audioContext.currentTime);
+        if (type === "good") osc.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.13, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioContext.currentTime + 0.26);
+      } catch (e) {}
+    }
+
+    function speakWord(word) {
+      try {
+        if (!("speechSynthesis" in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = "zh-HK";
+        utterance.rate = 0.72;
+        utterance.pitch = 1.15;
+        utterance.onerror = () => {};
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.warn("speakWord failed silently:", e);
+      }
+    }
+
+    function setFeedback(message, icon) {
+      try {
+        const feedback = el("feedback");
+        if (!feedback) return;
+        el("feedback-text").textContent = message;
+        el("feedback-icon").setAttribute("data-lucide", icon);
+        feedback.classList.add("show");
+        lucide.createIcons();
+        clearTimeout(setFeedback.timer);
+        setFeedback.timer = setTimeout(() => feedback.classList.remove("show"), 1250);
+      } catch (e) {
+        console.warn("setFeedback failed silently:", e);
+      }
+    }
+
+    function chooseCharacter(button) {
+      selectedCharacter = button.dataset.character;
+      document.querySelectorAll(".character-choice").forEach(choice => {
+        const chosen = choice === button;
+        choice.classList.toggle("selected", chosen);
+        choice.setAttribute("aria-pressed", String(chosen));
+      });
+      el("choose-message").textContent = "";
+    }
+
+    document.querySelectorAll(".character-choice").forEach(button => {
+      button.addEventListener("click", () => chooseCharacter(button));
+    });
+
+    el("start-button").addEventListener("click", () => {
+      if (!selectedCharacter) {
+        el("choose-message").textContent = "請先選擇一位可愛角色！";
+        return;
+      }
+      startGame();
+    });
+
+    function buildRoundWord() {
+      return targetWords[gameState.collected.length];
+    }
+
+    function updateWordProgress() {
+      const collected = gameState.collected;
+      el("word-progress").textContent =
+        targetWords.map((word, index) => (index < collected.length ? collected[index] : "_")).join(" ");
+    }
+
+    function stopWatchdog() {
+      if (watchdogTimer) {
+        clearInterval(watchdogTimer);
+        watchdogTimer = null;
+      }
+    }
+
+    function startWatchdog() {
+      stopWatchdog();
+      watchdogTimer = setInterval(() => {
+        if (!gameState || gameState.ended) return;
+        if (screens.game.classList.contains("hidden-screen")) return;
+        const now = performance.now();
+        if (now - lastLoopTick > 1200) {
+          console.warn("偵測到遊戲迴圈停止，正在自動重新啟動...");
+          cancelAnimationFrame(animationFrame);
+          lastTime = performance.now();
+          lastLoopTick = lastTime;
+          animationFrame = requestAnimationFrame(gameLoop);
+        }
+      }, WATCHDOG_INTERVAL_MS);
+    }
+
+    function startGame() {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+      stopWatchdog();
+      clearTimeout(gameState?.nextRoundTimer);
+      document.querySelectorAll(".falling-mooncake").forEach(node => node.remove());
+      gameStartTime = performance.now();
+      completionTime = 0;
+      gameState = {
+        round: 1, score: 0, correct: 0, hearts: MAX_HEARTS, playerX: 50,
+        target: "", falling: [], nextRoundTimer: null, transitioning: false, ended: false,
+        usedWords: [], collected: [], noCorrectTimer: 0
+      };
+      el("player-avatar").textContent = avatars[selectedCharacter];
+      updateHud();
+      showScreen("game");
+      beginRound();
+      lastTime = performance.now();
+      lastLoopTick = lastTime;
+      animationFrame = requestAnimationFrame(gameLoop);
+      startWatchdog();
+    }
+
+    function beginRound() {
+      if (gameState.ended) return;
+      updateHud();
+      gameState.target = buildRoundWord();
+      el("target-word").textContent = gameState.target;
+      updateWordProgress();
+      spawnTimer = 0;
+      gameState.noCorrectTimer = 0;
+      speakWord(gameState.target);
+      setFeedback("找找看「" + gameState.target + "」在哪裡！", "search");
+    }
+
+    function updateHud() {
+      el("score-value").textContent = gameState.score;
+      el("round-value").textContent = gameState.round + " / " + totalRounds;
+      [1, 2, 3].forEach(n => el("heart-" + n).classList.toggle("lost", n > gameState.hearts));
+    }
+
+    function spawnMooncake(forceCorrect = false) {
+      const board = el("game-board");
+      const isCorrect = forceCorrect || Math.random() < 0.36;
+      const word = isCorrect ? gameState.target : distractorWords[Math.floor(Math.random() * distractorWords.length)];
+      const node = document.createElement("div");
+      node.className = "falling-mooncake";
+      node.textContent = word;
+      node.style.left = (5 + Math.random() * 82) + "%";
+      node.style.top = "-86px";
+      board.appendChild(node);
+      gameState.falling.push({
+        el: node, word, y: -86,
+        speed: 82 + gameState.round * 11 + Math.random() * 23
+      });
+      if (isCorrect) gameState.noCorrectTimer = 0;
+    }
+
+    function movePlayer(direction) {
+      if (!gameState || gameState.ended || screens.game.classList.contains("hidden-screen")) return;
+      gameState.playerX = Math.max(5, Math.min(95, gameState.playerX + direction * 7));
+      el("player").style.left = gameState.playerX + "%";
+    }
+
+    function movePlayerToPointer(event) {
+      if (!gameState || gameState.ended || screens.game.classList.contains("hidden-screen")) return;
+      const board = el("game-board");
+      const rect = board.getBoundingClientRect();
+      gameState.playerX = Math.max(5, Math.min(95, ((event.clientX - rect.left) / rect.width) * 100));
+      el("player").style.left = gameState.playerX + "%";
+    }
+
+    const gameBoard = el("game-board");
+    gameBoard.addEventListener("pointermove", event => {
+      if (event.pointerType === "mouse" || event.buttons > 0) movePlayerToPointer(event);
+    });
+    gameBoard.addEventListener("pointerdown", event => {
+      if (event.pointerType === "mouse") {
+        event.preventDefault();
+        gameBoard.setPointerCapture(event.pointerId);
+        movePlayerToPointer(event);
+      }
+    });
+
+    function gameLoop(timestamp) {
+      if (!gameState || gameState.ended || screens.game.classList.contains("hidden-screen")) {
+        animationFrame = null;
+        return;
+      }
+      lastLoopTick = timestamp;
+      try {
+        const delta = Math.min((timestamp - lastTime) / 1000, 0.05);
+        lastTime = timestamp;
+        const board = el("game-board");
+        const boardHeight = board.clientHeight;
+        spawnTimer += delta;
+        if (!gameState.transitioning) gameState.noCorrectTimer += delta;
+        const interval = Math.max(.55, 1.18 - gameState.round * .05);
+        if (!gameState.transitioning && spawnTimer > interval && gameState.falling.length < 5) {
+          const hasCorrectFalling = gameState.falling.some(c => c.word === gameState.target);
+          const forceCorrect = !hasCorrectFalling && gameState.noCorrectTimer > NO_CORRECT_TIMEOUT;
+          spawnMooncake(forceCorrect);
+          spawnTimer = 0;
+        }
+
+        const player = el("player");
+        player.style.left = gameState.playerX + "%";
+        const playerRect = player.getBoundingClientRect();
+
+        for (let i = gameState.falling.length - 1; i >= 0; i--) {
+          const cake = gameState.falling[i];
+          cake.y += cake.speed * delta;
+          cake.el.style.top = cake.y + "px";
+          const cakeRect = cake.el.getBoundingClientRect();
+          const caught = cakeRect.bottom >= playerRect.top + 14 &&
+            cakeRect.top <= playerRect.bottom - 4 &&
+            cakeRect.right > playerRect.left + 13 &&
+            cakeRect.left < playerRect.right - 13;
+
+          if (caught) {
+            catchMooncake(cake, i);
+            continue;
+          }
+          if (cake.y > boardHeight + 15) {
+            cake.el.remove();
+            gameState.falling.splice(i, 1);
+          }
+        }
+      } catch (err) {
+        console.warn("gameLoop 發生例外，已攔截並繼續運作：", err);
+      }
+      animationFrame = requestAnimationFrame(gameLoop);
+    }
+
+    function catchMooncake(cake, index) {
+      gameState.falling.splice(index, 1);
+      cake.el.classList.add("catch-pop");
+      setTimeout(() => cake.el.remove(), 350);
+      const player = el("player");
+      player.classList.add("bounce");
+      setTimeout(() => player.classList.remove("bounce"), 220);
+
+      if (cake.word === gameState.target) {
+        gameState.collected.push(cake.word);
+        gameState.score += 1;
+        gameState.correct += 1;
+        updateWordProgress();
+        updateHud();
+        playTone("good");
+        speakWord(cake.word);
+        setFeedback("答對了！", "sparkles");
+        gameState.transitioning = true;
+        gameState.nextRoundTimer = setTimeout(() => {
+          try {
+            if (!gameState || gameState.ended) return;
+            if (gameState.collected.length >= targetWords.length) {
+              gameState.transitioning = false;
+              finishGame(true);
+            } else {
+              gameState.round += 1;
+              gameState.falling.forEach(item => item.el.remove());
+              gameState.falling = [];
+              gameState.transitioning = false;
+              updateHud();
+              beginRound();
+            }
+          } catch (err) {
+            console.error("回合切換時發生例外：", err);
+          }
+        }, 950);
+      } else {
+        gameState.hearts = Math.max(0, gameState.hearts - 1);
+        updateHud();
+        playTone("oops");
+        setFeedback("再試一次", "rotate-ccw");
+        if (gameState.hearts === 0 && !gameState.ended) {
+          gameState.transitioning = true;
+          clearTimeout(gameState.nextRoundTimer);
+          gameState.falling.forEach(item => item.el.remove());
+          gameState.falling = [];
+          finishGame(false);
+        }
+      }
+    }
+
+    // 修正：finishGame 內所有 DOM 操作都先確認元素存在（el() 輔助函式會回傳 null 並警告，
+    // 而非直接讓 .classList 拋出 TypeError），避免任何個別缺漏的元素中斷整個結算流程，
+    // 讓畫面卡在遊戲畫面、無法跳轉到勝利／失敗頁。
+    function finishGame(won = false) {
+      if (!gameState || gameState.ended) return;
+      gameState.ended = true;
+      gameState.transitioning = false;
+      stopWatchdog();
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+      clearTimeout(gameState.nextRoundTimer);
+      if ("speechSynthesis" in window) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
+      document.querySelectorAll(".falling-mooncake").forEach(node => node.remove());
+
+      const safeText = (id, value) => { const node = el(id); if (node) node.textContent = value; };
+      const safeToggle = (id, cls, force) => { const node = el(id); if (node) node.classList.toggle(cls, force); };
+
+      safeText("result-avatar", avatars[selectedCharacter]);
+      safeText("result-role", selectedCharacter);
+      safeText("result-score", gameState.score);
+      safeText("result-correct", gameState.correct + " / " + totalRounds);
+      safeText("result-progress", gameState.collected.length ? gameState.collected.join(" ") + (gameState.collected.length < targetWords.length ? " " + targetWords.slice(gameState.collected.length).map(() => "_").join(" ") : "") : "_ _ _ _");
+
+      safeToggle("result-title", "hidden-screen", !won);
+      safeToggle("result-failure-title", "hidden-screen", won);
+      safeToggle("result-victory", "hidden-screen", !won);
+      safeToggle("failure-encouragement", "hidden-screen", won);
+      safeToggle("praise-high", "hidden-screen", won || gameState.score < 8);
+      safeToggle("praise-mid", "hidden-screen", gameState.score < 4 || gameState.score >= 8);
+      safeToggle("praise-low", "hidden-screen", gameState.score >= 4);
+
+      if (won) completionTime = Math.round((performance.now() - gameStartTime) / 100) / 10;
+      latestGameResult = { score: gameState.score, completionTime, completedWord: gameState.collected.join("") };
+      if (won) {
+        showScreen("leaderboard");
+        renderLeaderboard();
+      } else {
+        showScreen("result");
+      }
+    }
+
+    function renderLeaderboard() {
+      const list = el("leaderboard-list");
+      list.replaceChildren();
+      [...leaderboardEntries].sort((a, b) => a.completionTime - b.completionTime || a.order - b.order).forEach((entry, index) => {
+        const item = document.createElement("li");
+        item.className = "flex items-center justify-between rounded-2xl px-4 py-3 font-extrabold " + (entry.latest ? "bg-[#ffe39a] ring-4 ring-[#f4a62a]" : "bg-[#fff5c8]");
+        item.innerHTML = `<span>${index + 1}. ${entry.name}${entry.latest ? "　🌟" : ""}</span><span>完成時間：${entry.completionTime.toFixed(1)} 秒</span>`;
+        list.appendChild(item);
+      });
+    }
+
+    el("leaderboard-form").addEventListener("submit", event => {
+      event.preventDefault();
+      const input = el("student-name");
+      const name = input.value.trim();
+      const message = el("leaderboard-message");
+      if (!name) { message.textContent = "請先輸入你的姓名！"; input.focus(); return; }
+      leaderboardEntries.forEach(entry => entry.latest = false);
+      submissionOrder += 1;
+      leaderboardEntries.push({ name, score: latestGameResult.score, completionTime: latestGameResult.completionTime, completedWord: latestGameResult.completedWord, order: submissionOrder, latest: true });
+      input.value = "";
+      message.textContent = "成功登上龍虎榜！";
+      renderLeaderboard();
+    });
+    el("leaderboard-replay").addEventListener("click", startGame);
+    el("leaderboard-return").addEventListener("click", () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+      stopWatchdog();
+      clearTimeout(gameState?.nextRoundTimer);
+      document.querySelectorAll(".falling-mooncake").forEach(node => node.remove());
+      gameState = null;
+      latestGameResult = null;
+      showScreen("start");
+    });
+
+    document.addEventListener("keydown", event => {
+      if (["ArrowLeft", "a", "A"].includes(event.key)) { event.preventDefault(); movePlayer(-1); }
+      if (["ArrowRight", "d", "D"].includes(event.key)) { event.preventDefault(); movePlayer(1); }
+    });
+
+    function setupMoveControl(id, direction) {
+      const button = el(id);
+      let repeat;
+      const start = event => {
+        event.preventDefault();
+        movePlayer(direction);
+        repeat = setInterval(() => movePlayer(direction), 115);
+      };
+      const stop = () => clearInterval(repeat);
+      button.addEventListener("pointerdown", start);
+      ["pointerup", "pointerleave", "pointercancel"].forEach(type => button.addEventListener(type, stop));
+    }
+    setupMoveControl("move-left", -1);
+    setupMoveControl("move-right", 1);
+
+    el("replay-button").addEventListener("click", startGame);
+    el("return-button").addEventListener("click", () => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+      stopWatchdog();
+      clearTimeout(gameState?.nextRoundTimer);
+      document.querySelectorAll(".falling-mooncake").forEach(node => node.remove());
+      if ("speechSynthesis" in window) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
+      gameState = null;
+      latestGameResult = null;
+      showScreen("start");
+    });
+
+    lucide.createIcons();
+  </script>
+</body></html>
